@@ -28,6 +28,11 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   bool _isNavBarVisible = false;
+  bool _isSMSVisible = false; // Tambahkan state untuk SMS popup
+  bool _isWeatherVisible = false; // Tambahkan state untuk popup cuaca
+  bool _isDataSasaranVisible =
+      false; // Tambahkan state untuk popup Data Sasaran
+
   late GoogleMapController mapController;
 
   final LatLng _initialPosition = const LatLng(-6.2088, 106.8456); // Jakarta
@@ -57,22 +62,21 @@ class _DashboardPageState extends State<DashboardPage> {
             child: Column(
               children: [
                 _menuButton(Icons.chat, "Chat", () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SMSPage()),
-                  );
+                  setState(() {
+                    _isSMSVisible = !_isSMSVisible; // Toggle SMS popup
+                  });
                 }),
                 _menuButton(Icons.cloud, "Weather", () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CuacaPage()),
-                  );
+                  setState(() {
+                    _isWeatherVisible =
+                        !_isWeatherVisible; // Toggle Cuaca popup
+                  });
                 }),
                 _menuButton(Icons.photo_library, "Galeri Tembak", () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => DataSasaranPage()),
-                  );
+                  setState(() {
+                    _isDataSasaranVisible =
+                        !_isDataSasaranVisible; // Toggle Data Sasaran popup
+                  });
                 }),
                 _menuButton(Icons.list, "Targets", () {
                   Navigator.push(
@@ -89,6 +93,48 @@ class _DashboardPageState extends State<DashboardPage> {
               ],
             ),
           ),
+
+          // SMS Popup (Muncul di sebelah kanan tombol Chat)
+          if (_isSMSVisible)
+            Positioned(
+              left: 80, // Posisi di sebelah kanan tombol Chat
+              top: 120, // Tinggi menyesuaikan dengan tombol
+              child: SMSPage(
+                onClose: () {
+                  setState(() {
+                    _isSMSVisible = false;
+                  });
+                },
+              ),
+            ),
+
+          // Weather Popup (Muncul di sebelah kanan tombol Cuaca)
+          if (_isWeatherVisible)
+            Positioned(
+              left: 80,
+              top: 120,
+              child: CuacaPage(
+                onClose: () {
+                  setState(() {
+                    _isWeatherVisible = false;
+                  });
+                },
+              ),
+            ),
+
+          // Data Sasaran Popup (Tambahan baru)
+          if (_isDataSasaranVisible)
+            Positioned(
+              left: 80,
+              top: 120,
+              child: DataSasaranPage(
+                onClose: () {
+                  setState(() {
+                    _isDataSasaranVisible = false;
+                  });
+                },
+              ),
+            ),
 
           // Toggle button for navbar
           Positioned(
@@ -159,25 +205,25 @@ class _DashboardPageState extends State<DashboardPage> {
         _navButton(Icons.add, "Zoom In", () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => SMSPage()),
+            MaterialPageRoute(builder: (context) => DaftarTembakPage()),
           );
         }),
         _navButton(Icons.remove, "Zoom Out", () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => SMSPage()),
+            MaterialPageRoute(builder: (context) => DaftarTembakPage()),
           );
         }),
         _navButton(Icons.my_location, "Locate Me", () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => SMSPage()),
+            MaterialPageRoute(builder: (context) => DaftarTembakPage()),
           );
         }),
         _navButton(Icons.layers, "Layer Options", () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => SMSPage()),
+            MaterialPageRoute(builder: (context) => DaftarTembakPage()),
           );
         }),
         _navButton(Icons.settings, "Settings", () {
