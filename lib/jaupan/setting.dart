@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mortir_pindad/main.dart'; // import main.dart agar bisa diakses
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -25,6 +26,7 @@ class _SettingsPageState extends State<SettingsPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // 🔹 Header
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -43,12 +45,22 @@ class _SettingsPageState extends State<SettingsPage> {
                 ],
               ),
               const SizedBox(height: 20),
+
+              // 🔹 Tombol MENU OPERASI & KONFIGURASI (Kotak dengan Border Kuning)
               Row(
                 children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xDD000000),
-                        foregroundColor: Colors.white),
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor: const Color(0xDD000000),
+                      foregroundColor: Colors.white,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      side: const BorderSide(
+                          color: Color(0xFFFFEB3B), width: 1), // Border Kuning
+                    ),
                     onPressed: () {
                       setState(() {
                         showMenuOperasi = true;
@@ -57,10 +69,18 @@ class _SettingsPageState extends State<SettingsPage> {
                     child: const Text("MENU OPERASI"),
                   ),
                   const SizedBox(width: 10),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xDD000000),
-                        foregroundColor: Colors.white),
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor: const Color(0xDD000000),
+                      foregroundColor: Colors.white,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      side: const BorderSide(
+                          color: Color(0xFFFFEB3B), width: 1), // Border Kuning
+                    ),
                     onPressed: () {
                       setState(() {
                         showMenuOperasi = false;
@@ -70,7 +90,10 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ],
               ),
+
               const SizedBox(height: 20),
+
+              // 🔹 Konten di dalam Settings
               Expanded(
                 child: Container(
                   padding: const EdgeInsets.all(16),
@@ -84,7 +107,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             _settingTile("Pengaturan Akun", Icons.person),
                             _settingTile("Informasi Perangkat", Icons.info),
                             _settingTile("Keluar", Icons.logout,
-                                isLogout: true),
+                                isLogout: true), // Tambah Logout
                           ]
                         : [
                             _settingTile(
@@ -106,11 +129,18 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  Widget _settingTile(String title, IconData icon, {bool isLogout = false}) {
+  // 🔹 Widget untuk Tile Pengaturan (Termasuk Logout)
+  Widget _settingTile(String title, IconData icon, {bool isLogout = true}) {
     return InkWell(
       onTap: isLogout
           ? () {
-              Navigator.pushReplacementNamed(context, '/main');
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        const LoginPage()), // Arahkan ke Login
+                (Route<dynamic> route) => false, // Hapus semua history navigasi
+              );
             }
           : null,
       child: Container(
@@ -119,7 +149,8 @@ class _SettingsPageState extends State<SettingsPage> {
         decoration: BoxDecoration(
           color: Colors.grey[850],
           borderRadius: BorderRadius.circular(5),
-          border: Border.all(color: const Color(0xFFFFEB3B), width: 1),
+          border: Border.all(
+              color: const Color(0xFFFFEB3B), width: 1), // Border Kuning
         ),
         child: Row(
           children: [

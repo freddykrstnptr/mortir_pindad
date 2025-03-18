@@ -12,7 +12,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const LoginPage(),
+      initialRoute: '/', // ✅ Gunakan named routes
+      routes: {
+        '/': (context) => const LoginPage(),
+        '/home': (context) =>
+            const MainJaupanPage(), // ✅ Tambahkan halaman utama
+      },
     );
   }
 }
@@ -40,10 +45,7 @@ class _LoginPageState extends State<LoginPage> {
     String password = _passwordController.text.trim();
 
     if (username == "user" && password == "password") {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const MainJaupanPage()),
-      );
+      Navigator.pushReplacementNamed(context, '/home'); // ✅ Gunakan Named Route
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
