@@ -32,6 +32,7 @@ class _DashboardPageState extends State<DashboardPage> {
   bool _isWeatherVisible = false; // Tambahkan state untuk popup cuaca
   bool _isDataSasaranVisible =
       false; // Tambahkan state untuk popup Data Sasaran
+  bool _isDaftarTembakVisible = false; // Tambahkan state untuk popup cuaca
 
   late GoogleMapController mapController;
 
@@ -79,10 +80,10 @@ class _DashboardPageState extends State<DashboardPage> {
                   });
                 }),
                 _menuButton(Icons.list, "Targets", () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => DaftarTembakPage()),
-                  );
+                  setState(() {
+                    _isDaftarTembakVisible =
+                        !_isDaftarTembakVisible; // Toggle Data Tembak popup
+                  });
                 }),
                 _menuButton(Icons.explore, "Kompas", () {
                   Navigator.push(
@@ -131,6 +132,20 @@ class _DashboardPageState extends State<DashboardPage> {
                 onClose: () {
                   setState(() {
                     _isDataSasaranVisible = false;
+                  });
+                },
+              ),
+            ),
+
+          // Data Tembak Popup (Tambahan baru)
+          if (_isDaftarTembakVisible)
+            Positioned(
+              left: 80,
+              top: 120,
+              child: DaftarTembakPage(
+                onClose: () {
+                  setState(() {
+                    _isDaftarTembakVisible = false;
                   });
                 },
               ),
@@ -205,25 +220,25 @@ class _DashboardPageState extends State<DashboardPage> {
         _navButton(Icons.add, "Zoom In", () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => DaftarTembakPage()),
+            MaterialPageRoute(builder: (context) => DaftarObjekPage()),
           );
         }),
         _navButton(Icons.remove, "Zoom Out", () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => DaftarTembakPage()),
+            MaterialPageRoute(builder: (context) => DaftarObjekPage()),
           );
         }),
         _navButton(Icons.my_location, "Locate Me", () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => DaftarTembakPage()),
+            MaterialPageRoute(builder: (context) => DaftarObjekPage()),
           );
         }),
         _navButton(Icons.layers, "Layer Options", () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => DaftarTembakPage()),
+            MaterialPageRoute(builder: (context) => DaftarObjekPage()),
           );
         }),
         _navButton(Icons.settings, "Settings", () {

@@ -21,7 +21,8 @@ class DataSasaranPage extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white, // ✅ Latar belakang putih sesuai gambar
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.black, width: 2),
+        border: Border.all(
+            color: const Color.fromARGB(255, 255, 255, 255), width: 1),
         boxShadow: [
           BoxShadow(
             color: Colors.black26,
