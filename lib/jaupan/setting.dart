@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mortir_pindad/main.dart'; // Import main.dart agar bisa diakses
 import 'package:mortir_pindad/jaupan/modegps.dart'; // Import halaman Mode GPS
 import 'package:mortir_pindad/jaupan/tambahpeta.dart'; // Import halaman Tambah Peta
+import 'package:mortir_pindad/jaupan/pilihpeta.dart'; // Import halaman Pilih Peta
+import 'package:mortir_pindad/jaupan/kalkulatordeklinasi.dart'; // Import halaman Kalkulator Deklinasi
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -49,7 +51,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               const SizedBox(height: 20),
 
-              // 🔹 Tombol MENU OPERASI & KONFIGURASI (Kotak dengan Border Kuning)
+              // 🔹 Tombol MENU OPERASI & KONFIGURASI
               Row(
                 children: [
                   _menuButton("MENU OPERASI", true),
@@ -83,9 +85,14 @@ class _SettingsPageState extends State<SettingsPage> {
                                 onTap: () {
                               _showTambahPetaPopup();
                             }),
-                            _settingTile("Pilih Peta", Icons.map),
+                            _settingTile("Pilih Peta", Icons.map, onTap: () {
+                              _showPilihPetaPopup();
+                            }),
                             _settingTile(
-                                "Kalkulator Deklinasi", Icons.calculate),
+                                "Kalkulator Deklinasi", Icons.calculate,
+                                onTap: () {
+                              _showKalkulatorDeklinasiPopup();
+                            }),
                             _settingTile("Mode GPS", Icons.gps_fixed,
                                 onTap: () {
                               _showModeGPSPopup();
@@ -199,7 +206,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  // 🔹 Fungsi untuk Menampilkan Mode GPS sebagai Popup
+  // 🔹 Fungsi untuk Menampilkan Popups
   void _showModeGPSPopup() {
     showDialog(
       context: context,
@@ -212,7 +219,6 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  // 🔹 Fungsi untuk Menampilkan Tambah Peta sebagai Popup
   void _showTambahPetaPopup() {
     showDialog(
       context: context,
@@ -220,6 +226,30 @@ class _SettingsPageState extends State<SettingsPage> {
         return Dialog(
           backgroundColor: Colors.transparent,
           child: TambahPetaPage(onClose: () => Navigator.pop(context)),
+        );
+      },
+    );
+  }
+
+  void _showPilihPetaPopup() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: PilihPetaPage(onClose: () => Navigator.pop(context)),
+        );
+      },
+    );
+  }
+
+  void _showKalkulatorDeklinasiPopup() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: KalkulatorDeklinasiPage(onClose: () => Navigator.pop(context)),
         );
       },
     );

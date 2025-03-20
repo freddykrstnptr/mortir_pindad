@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 
-class TambahPetaPage extends StatefulWidget {
+class PilihPetaPage extends StatefulWidget {
   final VoidCallback onClose;
 
-  const TambahPetaPage({required this.onClose, Key? key}) : super(key: key);
+  const PilihPetaPage({required this.onClose, Key? key}) : super(key: key);
 
   @override
-  State<TambahPetaPage> createState() => _TambahPetaPageState();
+  State<PilihPetaPage> createState() => _PilihPetaPageState();
 }
 
-class _TambahPetaPageState extends State<TambahPetaPage> {
-  final TextEditingController namaDaerahController = TextEditingController();
-  final TextEditingController utaraController = TextEditingController();
-  final TextEditingController timurController = TextEditingController();
-  final TextEditingController selatanController = TextEditingController();
-  final TextEditingController baratController = TextEditingController();
+class _PilihPetaPageState extends State<PilihPetaPage> {
+  String selectedDaerah = "Bandung";
+  String selectedJenis = "Street Map";
+  int minZoomLevel = 8;
+  int maxZoomLevel = 19;
   bool showSuccessMessage = false;
 
   @override
@@ -27,21 +26,14 @@ class _TambahPetaPageState extends State<TambahPetaPage> {
             width: 500,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.yellow, width: 2),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 5,
-                  offset: Offset(0, 2),
-                ),
-              ],
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(color: Colors.yellow, width: 1),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 🔹 Header Lebar & Hitam
+                // Header diperlebar sesuai parent
                 Container(
                   width: double.infinity,
                   padding:
@@ -49,15 +41,15 @@ class _TambahPetaPageState extends State<TambahPetaPage> {
                   decoration: BoxDecoration(
                     color: Colors.black,
                     borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10),
+                      topLeft: Radius.circular(5),
+                      topRight: Radius.circular(5),
                     ),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text(
-                        "Tambah Peta",
+                        "Pilih Peta",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 18,
@@ -75,11 +67,44 @@ class _TambahPetaPageState extends State<TambahPetaPage> {
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     children: [
-                      _buildTextField("Nama Daerah", namaDaerahController),
-                      _buildTextField("Utara", utaraController),
-                      _buildTextField("Timur", timurController),
-                      _buildTextField("Selatan", selatanController),
-                      _buildTextField("Barat", baratController),
+                      _buildDropdown(
+                          "Daerah",
+                          [
+                            "Bandung",
+                            "Cikalong",
+                            "Lumajang",
+                            "Cililin",
+                            "Cipatat"
+                          ],
+                          selectedDaerah, (value) {
+                        setState(() {
+                          selectedDaerah = value!;
+                        });
+                      }),
+                      _buildDropdown(
+                          "Jenis",
+                          ["Street Map", "Satellite Map", "Topografi Map"],
+                          selectedJenis, (value) {
+                        setState(() {
+                          selectedJenis = value!;
+                        });
+                      }),
+                      _buildDropdown(
+                          "Min Zoom Level",
+                          List.generate(20, (index) => "$index"),
+                          "$minZoomLevel", (value) {
+                        setState(() {
+                          minZoomLevel = int.parse(value!);
+                        });
+                      }),
+                      _buildDropdown(
+                          "Max Zoom Level",
+                          List.generate(20, (index) => "$index"),
+                          "$maxZoomLevel", (value) {
+                        setState(() {
+                          maxZoomLevel = int.parse(value!);
+                        });
+                      }),
                       const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -89,11 +114,16 @@ class _TambahPetaPageState extends State<TambahPetaPage> {
                               backgroundColor: Colors.red,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5),
+                                side: const BorderSide(
+                                    color: Color.fromARGB(255, 255, 0, 0),
+                                    width: 1),
                               ),
                             ),
                             onPressed: widget.onClose,
                             child: const Text("BATAL",
-                                style: TextStyle(color: Colors.white)),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold)),
                           ),
                           const SizedBox(width: 10),
                           ElevatedButton(
@@ -101,6 +131,9 @@ class _TambahPetaPageState extends State<TambahPetaPage> {
                               backgroundColor: Colors.black,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5),
+                                side: const BorderSide(
+                                    color: Color.fromARGB(255, 0, 0, 0),
+                                    width: 1),
                               ),
                             ),
                             onPressed: () {
@@ -117,7 +150,9 @@ class _TambahPetaPageState extends State<TambahPetaPage> {
                               });
                             },
                             child: const Text("SIMPAN",
-                                style: TextStyle(color: Colors.white)),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold)),
                           ),
                         ],
                       ),
@@ -162,34 +197,49 @@ class _TambahPetaPageState extends State<TambahPetaPage> {
     );
   }
 
-  Widget _buildTextField(String label, TextEditingController controller) {
+  Widget _buildDropdown(String label, List<String> options,
+      String selectedValue, ValueChanged<String?> onChanged) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: Row(
         children: [
           SizedBox(
-            width: 120,
+            width: 150,
             child: Text(
               label,
               style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
           ),
           Expanded(
-            child: TextField(
-              controller: controller,
-              decoration: const InputDecoration(
-                isDense: true,
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                border: UnderlineInputBorder(),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
+                color: Colors.grey[350],
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: selectedValue,
+                  isExpanded: true,
+                  dropdownColor: Colors.grey[350],
+                  style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                  icon: const Icon(Icons.arrow_drop_down, color: Colors.black),
+                  onChanged: onChanged,
+                  items: options.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
                 ),
               ),
-              style: const TextStyle(fontSize: 16, color: Colors.black),
             ),
           ),
         ],
