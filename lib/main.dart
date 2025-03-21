@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mortir_pindad/jaupan/mainjaupan.dart';
+import 'package:mortir_pindad/pusat/mainpusat.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const LoginPage(),
         '/home': (context) =>
-            const MainJaupanPage(), // ✅ Tambahkan halaman utama
+            const MainPusatPage(), // ✅ Tambahkan halaman utama
       },
     );
   }

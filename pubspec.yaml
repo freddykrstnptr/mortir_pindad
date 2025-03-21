@@ -62,6 +62,8 @@ flutter:
     - asset/img/tes1.jpg
     - asset/img/tes2.jpg
     - asset/img/tes3.jpg
+    - asset/img/
+    - asset/img/calendar.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
