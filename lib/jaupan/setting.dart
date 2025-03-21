@@ -4,6 +4,7 @@ import 'package:mortir_pindad/jaupan/modegps.dart'; // Import halaman Mode GPS
 import 'package:mortir_pindad/jaupan/tambahpeta.dart'; // Import halaman Tambah Peta
 import 'package:mortir_pindad/jaupan/pilihpeta.dart'; // Import halaman Pilih Peta
 import 'package:mortir_pindad/jaupan/kalkulatordeklinasi.dart'; // Import halaman Kalkulator Deklinasi
+import 'package:mortir_pindad/jaupan/pengaturanakun.dart'; // Import halaman Pengaturan Akun
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -73,7 +74,10 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: Column(
                     children: showMenuOperasi
                         ? [
-                            _settingTile("Pengaturan Akun", Icons.person),
+                            _settingTile("Pengaturan Akun", Icons.person,
+                                onTap: () {
+                              _showPengaturanAkunPopup();
+                            }),
                             _settingTile("Informasi Perangkat", Icons.info),
                             _settingTile("Keluar", Icons.logout,
                                 isLogout: true),
@@ -250,6 +254,18 @@ class _SettingsPageState extends State<SettingsPage> {
         return Dialog(
           backgroundColor: Colors.transparent,
           child: KalkulatorDeklinasiPage(onClose: () => Navigator.pop(context)),
+        );
+      },
+    );
+  }
+
+  void _showPengaturanAkunPopup() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: PengaturanAkunPage(),
         );
       },
     );
