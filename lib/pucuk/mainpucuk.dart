@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
+import 'menu_awal.dart'; // Impor file menu_awal.dart
 
-class MainPucukPage extends StatelessWidget {
-  const MainPucukPage({super.key});
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Pucuk Page")),
-      body: const Center(child: Text("Ini adalah halaman Pucuk")),
+    return MaterialApp(
+      title: 'Mortar Sight App',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+      ),
+      debugShowCheckedModeBanner: false,
+      home: const MenuAwal(), // Langsung ke halaman MenuAwal
     );
   }
 }
