@@ -15,95 +15,176 @@ class _InformasiPerangkatPageState extends State<InformasiPerangkatPage> {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius:
-            BorderRadius.circular(15), // Apply the same radius to all corners
+        borderRadius: BorderRadius.circular(15),
       ),
       child: Container(
-        width: 500,
+        width: 500, // Dialog width
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: Color(0xFF212121), // Dark background for content
+          color: Color(0xFF212121), // Dark background
           border: Border.all(
-              color: Colors.yellow,
-              width: 2), // Yellow border around the entire dialog
+            color: Color(0xFFFFEB3B), // Yellow border
+            width: 2, // Border width
+          ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Stack(
           children: [
-            // Title Bar with Yellow Border at the bottom
-            Container(
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Color(0xFF212121),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(15), // Rounded corner for top-left
-                  topRight: Radius.circular(15), // Rounded corner for top-right
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            // Wrapping the main content in a SingleChildScrollView
+            SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment:
+                    CrossAxisAlignment.center, // Center the content
                 children: [
-                  Text('Informasi Perangkat',
-                      style: TextStyle(
+                  // Title with a seamless yellow border on the bottom and sides
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Color(0xFFFFEB3B), // Yellow border for bottom
+                          width: 2, // Border thickness
+                        ),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment:
+                          MainAxisAlignment.center, // Center title
+                      children: [
+                        Text(
+                          'Informasi Perangkat',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  // Aplikasi Sisbak Section
+                  _buildSectionTitle('Aplikasi Sisbak'),
+                  _buildInfoRow('Aplikasi Sisbak', ':'),
+                  _buildInfoRow('Build Number', ': 25.02.13 15:57:35'),
+
+                  SizedBox(height: 20),
+                  // Unit Display Section
+                  _buildSectionTitle('Unit Display'),
+                  _buildInfoRow('OS Versi', ': 8.1.0'),
+                  _buildInfoRow('Layar', ': OPM1.171019.026release-keys'),
+                  _buildInfoRow('Resolusi', ': {2070, 1080}'),
+                  _buildInfoRow('Kapasitif', ': Capacitive Multi Touch'),
+                  _buildInfoRow('Antarmuka', ': T91EUE1'),
+                  _buildInfoRow('Versi Incremental', ': T91_4.4.1'),
+                  _buildInfoRow('SDK', ': 27'),
+                  _buildInfoRow('Board', ': sdm945'),
+                  _buildInfoRow('User', ': Root'),
+
+                  // Additional Information from the first image (example text)
+                  SizedBox(height: 20),
+                  _buildSectionTitle('Unit Kontrol'),
+                  _buildInfoRow('Kernel', ': Linux 4.14,78-hdte-k100+'),
+                  _buildInfoRow('Arsitektur', ': armv71'),
+                  _buildInfoRow('Processor', ': armv71'),
+                  _buildInfoRow('RAM', ': 516 MB'),
+                  _buildInfoRow('Penyimpanan Internal', ': 3660771'),
+                  _buildInfoRow('Status', ': Aktif'),
+
+                  // Adding the missing "Status Sensor" section next to the button
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Status Sensor',
+                        style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 22)),
-                  IconButton(
-                      icon: Icon(Icons.close, color: Colors.white),
-                      onPressed: widget.onClose),
+                          fontSize: 18,
+                        ),
+                      ),
+                      SizedBox(width: 20), // Space between label and button
+                      ElevatedButton(
+                        onPressed: () {
+                          // Action for the Status Sensor button
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color.fromARGB(255, 255, 255,
+                              255), // Yellow background for button
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 30, vertical: 10),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Text(
+                          'Status Sensor',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
-            // Divider after Title
-            Divider(
-                color: Colors.yellow, thickness: 2), // Merged with the border
-            SizedBox(height: 20),
-            // Content Sections
-            _buildSection('Aplikasi Sisbak', 'Build Number: 25.02.13 15:57:35'),
-            _buildSection('Unit Display',
-                'OS Versi: 8.1.0\nLayar: OPM1.171019.026release-keys\nResolusi: {2070, 1080}\nKapasitif: Capacitive Multi Touch\nAntarmuka: T91EUE1\nVersi Incremental: T91_4.4.1\nSDK: 27\nBoard: sdm945\nUser: Root'),
-            // Divider
-            Divider(color: Colors.grey, thickness: 1),
-            // OK Button section with White Background
-            Container(
-              color: Colors.white,
-              padding: EdgeInsets.all(10),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: ElevatedButton(
-                  onPressed: widget.onClose,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.yellow,
-                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30)),
+            // Positioned OK Button at the bottom-right
+            Positioned(
+              bottom: 10,
+              right: 10,
+              child: ElevatedButton(
+                onPressed: widget.onClose, // Close the dialog
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      Colors.yellow, // Yellow background for button
+                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
                   ),
-                  child: Text('OK', style: TextStyle(color: Colors.black)),
+                ),
+                child: Text(
+                  'OK',
+                  style: TextStyle(color: Colors.black),
                 ),
               ),
             ),
-            // Space to move the button further down
-            SizedBox(height: 20),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildSection(String title, String content) {
+  // Method to build section titles
+  Widget _buildSectionTitle(String title) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Text(
+        title,
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+        ),
+      ),
+    );
+  }
+
+  // Method to create information rows
+  Widget _buildInfoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center, // Center align the text
         children: [
-          Text(title,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18)),
-          SizedBox(height: 5),
-          Text(content, style: TextStyle(color: Colors.white)),
+          Text(
+            label,
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(width: 10),
+          Text(
+            value,
+            style: TextStyle(color: Colors.white),
+          ),
         ],
       ),
     );

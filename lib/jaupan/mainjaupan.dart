@@ -37,6 +37,13 @@ class _DashboardPageState extends State<DashboardPage> {
   bool _isDataSasaranVisible = false;
   bool _isDaftarTembakVisible = false;
   bool _isDaftarObjekVisible = false;
+  bool _isKoPucukDialogVisible = false;
+  bool _showSuccessAlert = false; // Added for showing success alert
+
+  TextEditingController _idPucukController = TextEditingController();
+  TextEditingController _latitudeController = TextEditingController();
+  TextEditingController _longitudeController = TextEditingController();
+  TextEditingController _altitudeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -45,56 +52,202 @@ class _DashboardPageState extends State<DashboardPage> {
         children: [
           MapScreen(controller: _mapController),
 
-          // Status bar atas
           Positioned(
             top: 0,
             left: 0,
             right: 0,
             child: Container(
               color: Colors.grey.shade900,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 18),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 18), // Menyesuaikan padding bar status
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment
+                    .start, // Agar tombol tidak tersebar merata
                 children: [
-                  _statusGroup(backgroundColor: Colors.black, children: const [
-                    Icon(Icons.circle, color: Colors.green, size: 12),
-                    SizedBox(width: 4),
-                    Text('CCU', style: TextStyle(color: Colors.white)),
+                  // Tombol untuk CCU
+                  _statusGroup(backgroundColor: Colors.black, children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        foregroundColor: Colors.green,
+                        side: BorderSide(
+                            color: const Color.fromARGB(255, 0, 0, 0),
+                            width: 2),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4)),
+                      ),
+                      onPressed: () {},
+                      child: Row(
+                        children: const [
+                          Icon(Icons.circle, color: Colors.green, size: 12),
+                          SizedBox(width: 4),
+                          Text('CCU', style: TextStyle(color: Colors.green)),
+                        ],
+                      ),
+                    ),
                   ]),
-                  _statusGroup(backgroundColor: Colors.white, children: const [
-                    Icon(Icons.change_history, color: Colors.green),
-                    SizedBox(width: 4),
-                    Text('6133 2876', style: TextStyle(color: Colors.black)),
+
+                  SizedBox(width: 3), // Jarak antar tombol
+
+                  // Tombol untuk ID Pucuk
+                  _statusGroup(
+                      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+                            foregroundColor: Colors.green,
+                            side: BorderSide(
+                                color: const Color.fromARGB(255, 0, 0, 0),
+                                width: 2),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 10),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4)),
+                          ),
+                          onPressed: () {},
+                          child: Row(
+                            children: const [
+                              Icon(Icons.change_history, color: Colors.green),
+                              SizedBox(width: 4),
+                              Text('6133 2876',
+                                  style: TextStyle(color: Colors.green)),
+                            ],
+                          ),
+                        ),
+                      ]),
+
+                  SizedBox(width: 3), // Jarak antar tombol
+
+                  // Tombol untuk KO PUCUK
+                  _statusGroup(
+                      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+                            foregroundColor: Colors.red,
+                            side: BorderSide(
+                                color: const Color.fromARGB(255, 0, 0, 0),
+                                width: 2),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 10),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4)),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _isKoPucukDialogVisible = true;
+                            });
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: const [
+                              Icon(Icons.arrow_upward, color: Colors.red),
+                              SizedBox(width: 8),
+                              Text('KO PUCUK',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16)),
+                            ],
+                          ),
+                        ),
+                      ]),
+
+                  SizedBox(width: 3), // Jarak antar tombol
+
+                  // Tombol untuk info lainnya
+                  _statusGroup(backgroundColor: Colors.black, children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        foregroundColor: Colors.orange,
+                        side: BorderSide(
+                            color: const Color.fromARGB(255, 0, 0, 0),
+                            width: 2),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4)),
+                      ),
+                      onPressed: () {},
+                      child: Row(
+                        children: const [
+                          Icon(Icons.electric_bolt, color: Colors.orange),
+                          SizedBox(width: 4),
+                          Text('100/', style: TextStyle(color: Colors.red)),
+                          Text('200/', style: TextStyle(color: Colors.orange)),
+                          Text('300', style: TextStyle(color: Colors.amber)),
+                        ],
+                      ),
+                    ),
                   ]),
-                  _statusGroup(backgroundColor: Colors.white, children: const [
-                    Icon(Icons.arrow_upward, color: Colors.red),
-                    SizedBox(width: 4),
-                    Text('KO PUCUK',
-                        style: TextStyle(
-                            color: Colors.red, fontWeight: FontWeight.bold)),
+
+                  SizedBox(width: 3), // Jarak antar tombol
+
+                  // Tombol untuk Battery info
+                  _statusGroup(backgroundColor: Colors.black, children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        foregroundColor: Colors.white,
+                        side: BorderSide(
+                            color: const Color.fromARGB(255, 0, 0, 0),
+                            width: 2),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4)),
+                      ),
+                      onPressed: () {},
+                      child: Row(
+                        children: const [
+                          Icon(Icons.battery_full, color: Colors.white),
+                          SizedBox(width: 2),
+                          Text('CCU 100%',
+                              style: TextStyle(color: Colors.white)),
+                          SizedBox(width: 8),
+                          Icon(Icons.battery_full, color: Colors.white),
+                          SizedBox(width: 2),
+                          Text('DISPLAY 100%',
+                              style: TextStyle(color: Colors.white)),
+                        ],
+                      ),
+                    ),
                   ]),
-                  _statusGroup(backgroundColor: Colors.black, children: const [
-                    Icon(Icons.electric_bolt, color: Colors.orange),
-                    SizedBox(width: 4),
-                    Text('100/', style: TextStyle(color: Colors.red)),
-                    Text('200/', style: TextStyle(color: Colors.orange)),
-                    Text('300', style: TextStyle(color: Colors.amber)),
-                  ]),
-                  _statusGroup(backgroundColor: Colors.black, children: const [
-                    Icon(Icons.battery_full, color: Colors.white),
-                    SizedBox(width: 2),
-                    Text('CCU 100%', style: TextStyle(color: Colors.white)),
-                    SizedBox(width: 8),
-                    Icon(Icons.battery_full, color: Colors.white),
-                    SizedBox(width: 2),
-                    Text('DISPLAY 100%', style: TextStyle(color: Colors.white)),
-                  ]),
-                  _statusGroup(backgroundColor: Colors.grey, children: const [
-                    Icon(Icons.folder, color: Colors.green),
-                    SizedBox(width: 4),
-                    Text('071559 FEB 2025',
-                        style: TextStyle(color: Colors.white)),
-                  ]),
+
+                  SizedBox(width: 3), // Jarak antar tombol
+
+                  // Tombol untuk Timestamp
+                  _statusGroup(
+                      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+                            foregroundColor: Colors.green,
+                            side: BorderSide(
+                                color: const Color.fromARGB(255, 0, 0, 0),
+                                width: 2),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 10),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4)),
+                          ),
+                          onPressed: () {},
+                          child: Row(
+                            children: const [
+                              Icon(Icons.folder, color: Colors.green),
+                              SizedBox(width: 4),
+                              Text('071559 FEB 2025',
+                                  style: TextStyle(color: Colors.green)),
+                            ],
+                          ),
+                        ),
+                      ]),
                 ],
               ),
             ),
@@ -191,6 +344,160 @@ class _DashboardPageState extends State<DashboardPage> {
               ],
             ),
           ),
+
+          // Dialog input (Posisi Pucuk)
+          if (_isKoPucukDialogVisible)
+            Positioned(
+              top: 150,
+              left: 50,
+              right: 50,
+              child: Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+                child: Container(
+                  width: 700,
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Title
+                      Center(
+                        child: const Text(
+                          "Masukan Posisi Pucuk",
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+
+                      // Input Fields
+                      _buildTextField(_idPucukController, 'ID Pucuk'),
+                      SizedBox(height: 8),
+                      _buildTextField(_latitudeController, 'Latitude Pucuk'),
+                      SizedBox(height: 8),
+                      _buildTextField(_longitudeController, 'Longitude Pucuk'),
+                      SizedBox(height: 8),
+                      _buildTextField(_altitudeController, 'Altitude Pucuk'),
+                      SizedBox(height: 20),
+
+                      // Save and Cancel buttons
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  _isKoPucukDialogVisible = false;
+                                  _showSuccessAlert =
+                                      true; // Show success alert
+                                });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
+                                backgroundColor: Colors.grey.shade300,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8)),
+                              ),
+                              child: const Text(
+                                "SIMPAN",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: Colors.black),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 16),
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  _isKoPucukDialogVisible = false;
+                                });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
+                                backgroundColor: Colors.grey.shade300,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8)),
+                              ),
+                              child: const Text(
+                                "BATAL",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: Colors.black),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+          if (_showSuccessAlert)
+            Positioned(
+              top: 100,
+              left: 50,
+              right: 50,
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Container(
+                  width: 300, // Fixed width for the alert
+                  padding: const EdgeInsets.all(12.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                        size: 24, // Adjust size if necessary
+                      ),
+                      const SizedBox(width: 8),
+                      const Expanded(
+                        child: Text(
+                          'Posisi Berhasil Disimpan',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              color: Colors.black),
+                          overflow: TextOverflow
+                              .ellipsis, // Ensure text doesn't overflow
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close, color: Colors.grey),
+                        onPressed: () {
+                          setState(() {
+                            _showSuccessAlert = false;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -202,7 +509,7 @@ class _DashboardPageState extends State<DashboardPage> {
       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(3),
       ),
       child: Row(mainAxisSize: MainAxisSize.min, children: children),
     );
@@ -262,4 +569,51 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
     );
   }
+}
+
+// Helper method to build TextField
+Widget _buildTextField(TextEditingController controller, String label) {
+  return Container(
+    width: double.infinity,
+    child: TextField(
+      controller: controller,
+      style: const TextStyle(color: Colors.black),
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: const TextStyle(color: Colors.black),
+        border: const OutlineInputBorder(),
+        filled: true,
+        fillColor: Colors.white,
+      ),
+    ),
+  );
+}
+
+// Helper method to group buttons
+Widget _statusGroup(
+    {required Color backgroundColor, required List<Widget> children}) {
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+    decoration: BoxDecoration(
+      color: backgroundColor,
+      borderRadius: BorderRadius.circular(3),
+    ),
+    child: Row(mainAxisSize: MainAxisSize.min, children: children),
+  );
+}
+
+// Helper method to build menu button
+Widget _menuButton(IconData icon, String label, VoidCallback onPressed) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8.0),
+    child: ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        shape: const CircleBorder(),
+        padding: const EdgeInsets.all(16),
+        backgroundColor: Colors.black,
+      ),
+      onPressed: onPressed,
+      child: Icon(icon, color: Colors.white),
+    ),
+  );
 }

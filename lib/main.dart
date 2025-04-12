@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 20),
               const Text(
-                "Sisbak Mortir - Pusturbak",
+                "Sisbak Mortir - Peninjau (JAUPAN)",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
