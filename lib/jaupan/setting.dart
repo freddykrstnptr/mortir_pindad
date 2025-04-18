@@ -269,7 +269,7 @@ class _SettingsPageState extends State<SettingsPage> {
       builder: (BuildContext context) {
         return Dialog(
           backgroundColor: Colors.transparent,
-          // child: PengaturanAkunPage(onClose: () => Navigator.pop(context)),
+          child: PengaturanAkunPage(onClose: () => Navigator.pop(context)),
         );
       },
     );

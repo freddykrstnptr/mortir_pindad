@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class PengaturanAkunPage extends StatefulWidget {
-  const PengaturanAkunPage({Key? key}) : super(key: key);
+  final VoidCallback onClose;
+
+  const PengaturanAkunPage({Key? key, required this.onClose}) : super(key: key);
 
   @override
   State<PengaturanAkunPage> createState() => _PengaturanAkunPageState();
@@ -11,18 +13,6 @@ class _PengaturanAkunPageState extends State<PengaturanAkunPage> {
   bool _obscureText = true;
   final TextEditingController _passwordController = TextEditingController();
   bool _showSisbakPage = false;
-
-  void _showPengaturanAkunPopup() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          child: PengaturanAkunPage(),
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +45,7 @@ class _PengaturanAkunPageState extends State<PengaturanAkunPage> {
                       ),
                       IconButton(
                         icon: const Icon(Icons.close, color: Colors.white),
-                        onPressed: () => Navigator.pop(context),
+                        onPressed: widget.onClose,
                       )
                     ],
                   ),

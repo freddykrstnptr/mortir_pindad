@@ -22,6 +22,49 @@ class MainJaupanPage extends StatelessWidget {
   }
 }
 
+class _AmunisiCell extends StatelessWidget {
+  final String text;
+  const _AmunisiCell(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 50,
+      height: 30,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black, width: 1),
+        borderRadius: BorderRadius.circular(4),
+        color: Colors.white,
+      ),
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+          color: Colors.black,
+        ),
+      ),
+    );
+  }
+}
+
+Widget _amunisiTextCell(String text) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8.0),
+    child: Center(
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+          color: Colors.black,
+        ),
+      ),
+    ),
+  );
+}
+
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
 
@@ -38,6 +81,7 @@ class _DashboardPageState extends State<DashboardPage> {
   bool _isDaftarTembakVisible = false;
   bool _isDaftarObjekVisible = false;
   bool _isKoPucukDialogVisible = false;
+  bool _isArahAmunisiVisible = false;
   bool _showSuccessAlert = false; // Added for showing success alert
 
   TextEditingController _idPucukController = TextEditingController();
@@ -173,7 +217,11 @@ class _DashboardPageState extends State<DashboardPage> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(4)),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          _isArahAmunisiVisible = !_isArahAmunisiVisible;
+                        });
+                      },
                       child: Row(
                         children: const [
                           Icon(Icons.electric_bolt, color: Colors.orange),
@@ -440,6 +488,109 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                     ],
                   ),
+                ),
+              ),
+            ),
+
+          if (_isArahAmunisiVisible)
+            Center(
+              child: Container(
+                width: 400,
+                margin: const EdgeInsets.only(bottom: 100),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade900,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Header
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
+                      decoration: const BoxDecoration(
+                        color: Colors.black,
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(8)),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Amunisi',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _isArahAmunisiVisible = false;
+                              });
+                            },
+                            child: const Icon(Icons.close, color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // Label atas (simbol dan teks warna)
+                    Container(
+                      color: Colors.black,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 6),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: const [
+                          Icon(Icons.arrow_upward, color: Colors.green),
+                          Text('TJ',
+                              style: TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold)),
+                          Text('ASP',
+                              style: TextStyle(
+                                  color: Colors.orange,
+                                  fontWeight: FontWeight.bold)),
+                          Text('CHY',
+                              style: TextStyle(
+                                  color: Colors.amber,
+                                  fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                    ),
+
+                    // Nilai-nilai amunisi
+                    Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius:
+                            BorderRadius.vertical(bottom: Radius.circular(8)),
+                      ),
+                      child: Table(
+                        columnWidths: const {
+                          0: FlexColumnWidth(),
+                          1: FlexColumnWidth(),
+                          2: FlexColumnWidth(),
+                          3: FlexColumnWidth(),
+                        },
+                        border: TableBorder.symmetric(
+                          inside: BorderSide(color: Colors.black, width: 0.5),
+                        ),
+                        children: [
+                          TableRow(
+                            children: [
+                              _amunisiTextCell('1'),
+                              _amunisiTextCell('32'),
+                              _amunisiTextCell('30'),
+                              _amunisiTextCell('24'),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
