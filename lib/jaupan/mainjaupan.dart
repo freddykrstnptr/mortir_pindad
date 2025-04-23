@@ -9,6 +9,7 @@ import 'package:mortir_pindad/jaupan/cuaca.dart';
 import 'package:mortir_pindad/jaupan/datasasaran.dart';
 import 'package:mortir_pindad/jaupan/daftarobjek.dart';
 import 'package:mortir_pindad/jaupan/daftartembak.dart';
+import 'package:mortir_pindad/jaupan/binocular.dart';
 
 class MainJaupanPage extends StatelessWidget {
   const MainJaupanPage({super.key});
@@ -123,7 +124,13 @@ class _DashboardPageState extends State<DashboardPage> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(4)),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const BinocularViewPage()),
+                        );
+                      },
                       child: Row(
                         children: const [
                           Icon(Icons.circle, color: Colors.green, size: 12),
