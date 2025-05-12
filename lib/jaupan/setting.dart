@@ -16,7 +16,6 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   bool showMenuOperasi = false;
-  bool isModeManualActive = false;
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +86,6 @@ class _SettingsPageState extends State<SettingsPage> {
                                 isLogout: true),
                           ]
                         : [
-                            _toggleModeTile(),
                             _settingTile("Daftar Tembak", Icons.list),
                             _settingTile("Tambah Peta", Icons.add_location,
                                 onTap: () {
@@ -164,45 +162,6 @@ class _SettingsPageState extends State<SettingsPage> {
             const SizedBox(width: 10),
             Text(
               title,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Widget untuk Tile Aktifkan Mode Manual
-  Widget _toggleModeTile() {
-    return InkWell(
-      onTap: () {
-        setState(() {
-          isModeManualActive = !isModeManualActive;
-        });
-      },
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 5),
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-        decoration: BoxDecoration(
-          color: Colors.grey[850],
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(color: const Color(0xFFFFEB3B), width: 1),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              isModeManualActive ? Icons.toggle_on : Icons.toggle_off,
-              color: isModeManualActive ? Colors.yellow : Colors.white,
-              size: 30,
-            ),
-            const SizedBox(width: 10),
-            Text(
-              isModeManualActive
-                  ? "Non Aktifkan Mode Manual"
-                  : "Aktifkan Mode Manual",
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,

@@ -81,14 +81,483 @@ class _DashboardPageState extends State<DashboardPage> {
   bool _isDataSasaranVisible = false;
   bool _isDaftarTembakVisible = false;
   bool _isDaftarObjekVisible = false;
+  bool _isModeOnoffVisible = false;
   bool _isKoPucukDialogVisible = false;
   bool _isArahAmunisiVisible = false;
   bool _showSuccessAlert = false; // Added for showing success alert
+  bool _isModeDialogVisible = false;
 
+// Controller untuk input
   TextEditingController _idPucukController = TextEditingController();
   TextEditingController _latitudeController = TextEditingController();
   TextEditingController _longitudeController = TextEditingController();
   TextEditingController _altitudeController = TextEditingController();
+  TextEditingController arahTDController = TextEditingController();
+  TextEditingController jarakTDController = TextEditingController();
+  TextEditingController sudutKompasController = TextEditingController();
+  TextEditingController dariTD1Controller = TextEditingController();
+  TextEditingController dariTD2Controller = TextEditingController();
+  TextEditingController jarakPeninjauController = TextEditingController();
+  TextEditingController jarakKePucukController = TextEditingController();
+  TextEditingController sudutKompasKeTDController = TextEditingController();
+  TextEditingController sudutKompasKeTPController = TextEditingController();
+  TextEditingController arahTP1Controller = TextEditingController();
+  TextEditingController jarakTP1Controller = TextEditingController();
+  TextEditingController pucukXController = TextEditingController();
+  TextEditingController pucukYController = TextEditingController();
+  TextEditingController jaupanXController = TextEditingController();
+  TextEditingController jaupanYController = TextEditingController();
+  TextEditingController sasaranXController = TextEditingController();
+  TextEditingController sasaranYController = TextEditingController();
+  TextEditingController arahTengahSektorController = TextEditingController();
+
+  // Nilai toggle aktif
+  String arahPilihan = "Kanan";
+  String gerakPilihan = "Maju";
+  int currentMode = 1;
+
+  // build Mode1
+  Widget _buildMode1() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildInputRow("Arah ke TD", "mil", arahTDController),
+        const SizedBox(height: 12),
+        _buildInputRow("Jarak ke TD", "meter", jarakTDController),
+        const SizedBox(height: 12),
+        const Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "Permintaan Tembakan",
+            style: TextStyle(color: Colors.red, fontSize: 14),
+          ),
+        ),
+        const SizedBox(height: 12),
+        _buildInputRow("Sudut Kompas", "mil", sudutKompasController),
+        const SizedBox(height: 12),
+        _buildInputToggleRow(
+          label: "Dari TD",
+          controller: dariTD1Controller,
+          options: ["Kiri", "Kanan"],
+          selectedValue: arahPilihan,
+          onChanged: (val) {
+            setState(() {
+              arahPilihan = val;
+            });
+          },
+        ),
+        const SizedBox(height: 12),
+        _buildInputToggleRow(
+          label: "Dari TD",
+          controller: dariTD2Controller,
+          options: ["Mundur", "Maju"],
+          selectedValue: gerakPilihan,
+          onChanged: (val) {
+            setState(() {
+              gerakPilihan = val;
+            });
+          },
+        ),
+      ],
+    );
+  }
+
+  // build Mode2
+  Widget _buildMode2() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildInputRow("Arah ke TD", "mil", arahTDController),
+        const SizedBox(height: 12),
+        _buildInputRow("Jarak ke TD", "meter", jarakTDController),
+        const SizedBox(height: 16),
+        Row(
+          children: const [
+            Expanded(
+              child: Text(
+                "Penunjukkan Tempat Peninjau",
+                style: TextStyle(color: Colors.red),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Expanded(
+              child: Text(
+                "Permintaan Tembak",
+                style: TextStyle(color: Colors.red),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+                child: _buildInputRow(
+                    "Sudut Kompas ke TD", "mil", sudutKompasController)),
+            const SizedBox(width: 16),
+            Expanded(
+                child: _buildInputRow(
+                    "Sudut Kompas", "mil", sudutKompasController)),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+                child:
+                    _buildInputRow("Jarak ke TD", "meter", dariTD2Controller)),
+            const SizedBox(width: 16),
+            Expanded(
+                child: _buildInputRow(
+                    "Jarak Peninjau", "meter", jarakPeninjauController)),
+          ],
+        ),
+      ],
+    );
+  }
+
+  // build Mode3
+  Widget _buildMode3() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildInputRow("Arah ke TD", "mil", arahTDController),
+        const SizedBox(height: 12),
+        _buildInputRow("Jarak ke TD", "meter", jarakTDController),
+        const SizedBox(height: 16),
+        Row(
+          children: const [
+            Expanded(
+              child: Text(
+                "Penunjukkan Tempat Peninjau",
+                style: TextStyle(color: Colors.red),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Expanded(
+              child: Text(
+                "Permintaan Tembakan",
+                style: TextStyle(color: Colors.red),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: _buildInputRow(
+                  "Sudut Kompas ke Pucuk", "mil", dariTD1Controller),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child:
+                  _buildInputRow("Sudut Kompas", "mil", sudutKompasController),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: _buildInputRow(
+                  "Jarak ke Pucuk", "meter", jarakKePucukController),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: _buildInputRow(
+                  "Jarak Peninjau", "meter", jarakPeninjauController),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  // build Mode4
+  Widget _buildMode4() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildInputRow("Arah ke TD", "mil", arahTDController),
+        const SizedBox(height: 12),
+        _buildInputRow("Jarak ke TD", "meter", jarakTDController),
+        const SizedBox(height: 16),
+        Row(
+          children: const [
+            Expanded(
+              child: Text(
+                "Penunjukkan Tempat Peninjau",
+                style: TextStyle(color: Colors.red),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Expanded(
+              child: Text(
+                "Permintaan Tembakan",
+                style: TextStyle(color: Colors.red),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: _buildInputRow(
+                  "Sudut Kompas ke TD", "mil", sudutKompasKeTDController),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child:
+                  _buildInputRow("Sudut Kompas", "mil", sudutKompasController),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: _buildInputRow(
+                  "Sudut Kompas ke Pucuk", "mil", dariTD1Controller),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: _buildInputRow(
+                  "Jarak Peninjau", "meter", jarakPeninjauController),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  // build Mode5
+  Widget _buildMode5() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: _buildInputRow("Arah ke TD", "mil", arahTDController),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: _buildInputRow("Arah ke TP1", "mil", arahTP1Controller),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: _buildInputRow("Jarak ke TD", "meter", jarakTDController),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child:
+                  _buildInputRow("Jarak ke TP1", "meter", jarakTP1Controller),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: const [
+            Expanded(
+              child: Text(
+                "Penunjukkan Tempat Peninjau",
+                style: TextStyle(color: Colors.red),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Expanded(
+              child: Text(
+                "Permintaan Tembakan",
+                style: TextStyle(color: Colors.red),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: _buildInputRow(
+                  "Sudut Kompas ke TD", "mil", sudutKompasKeTDController),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child:
+                  _buildInputRow("Sudut Kompas", "mil", sudutKompasController),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: _buildInputRow(
+                  "Sudut Kompas ke TP", "mil", sudutKompasKeTPController),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: _buildInputRow(
+                  "Jarak Peninjau", "meter", jarakPeninjauController),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+// build Mode6
+  Widget _buildMode6() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildDoubleInputRow("Pucuk Co", pucukXController, pucukYController),
+        const SizedBox(height: 12),
+        _buildDoubleInputRow("Jaupan Co", jaupanXController, jaupanYController),
+        const SizedBox(height: 12),
+        _buildDoubleInputRow(
+            "Sasaran Co", sasaranXController, sasaranYController),
+        const SizedBox(height: 12),
+        _buildInputRow("Arah Tengah Sektor", "mil", arahTengahSektorController),
+        const SizedBox(height: 12),
+        _buildInputRow("Sudut Kompas", "mil", sudutKompasController),
+      ],
+    );
+  }
+
+  Widget _buildInputRow(
+      String label, String satuan, TextEditingController controller) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 3,
+          child: Text(label, style: const TextStyle(fontSize: 16)),
+        ),
+        Expanded(
+          flex: 5,
+          child: TextField(
+            controller: controller,
+            decoration: const InputDecoration(
+              isDense: true,
+              contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+              border: UnderlineInputBorder(),
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 2,
+          child: Text(satuan, style: const TextStyle(fontSize: 16)),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInputToggleRow({
+    required String label,
+    required TextEditingController controller,
+    required List<String> options,
+    required String selectedValue,
+    required Function(String) onChanged,
+  }) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 3,
+          child: Text(label, style: const TextStyle(fontSize: 16)),
+        ),
+        Expanded(
+          flex: 4,
+          child: TextField(
+            controller: controller,
+            decoration: const InputDecoration(
+              isDense: true,
+              contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+              border: UnderlineInputBorder(),
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 5,
+          child: Row(
+            children: options.map((opt) {
+              final isSelected = opt == selectedValue;
+              return Flexible(
+                child: GestureDetector(
+                  onTap: () => onChanged(opt),
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 6, horizontal: 8), // ⬅️ lebih ramping
+                    decoration: BoxDecoration(
+                      color: isSelected ? Colors.grey.shade800 : Colors.white,
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Center(
+                      child: Text(
+                        opt,
+                        style: TextStyle(
+                          fontSize: 13, // ⬅️ ukuran font lebih kecil
+                          color: isSelected ? Colors.white : Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDoubleInputRow(String label, TextEditingController xController,
+      TextEditingController yController) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 3,
+          child: Text(label, style: const TextStyle(fontSize: 16)),
+        ),
+        Expanded(
+          flex: 3,
+          child: TextField(
+            controller: xController,
+            decoration: const InputDecoration(
+              hintText: "X",
+              isDense: true,
+              contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+              border: UnderlineInputBorder(),
+            ),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          flex: 3,
+          child: TextField(
+            controller: yController,
+            decoration: const InputDecoration(
+              hintText: "Y",
+              isDense: true,
+              contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+              border: UnderlineInputBorder(),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -499,6 +968,119 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
             ),
 
+          if (_isModeDialogVisible)
+            Positioned(
+              top: 150,
+              left: 50,
+              right: 50,
+              child: Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+                child: Container(
+                  width: 600,
+                  padding: const EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.arrow_left),
+                            onPressed: () {
+                              setState(() {
+                                if (currentMode > 1) currentMode--;
+                              });
+                            },
+                          ),
+                          Text(
+                            "Mode $currentMode",
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.arrow_right),
+                            onPressed: () {
+                              setState(() {
+                                if (currentMode < 7) currentMode++;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+
+                      // ✨ INI YANG DIUBAH: konten berbeda tiap mode
+                      if (currentMode == 1)
+                        _buildMode1()
+                      else if (currentMode == 2)
+                        _buildMode2()
+                      else if (currentMode == 3)
+                        _buildMode3()
+                      else if (currentMode == 4)
+                        _buildMode4()
+                      else if (currentMode == 5)
+                        _buildMode5()
+                      else if (currentMode == 6)
+                        _buildMode6()
+                      else
+                        Text("Mode belum diimplementasikan"),
+
+                      const SizedBox(height: 24),
+
+                      // Tombol HITUNG dan BATAL
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                setState(() => _isModeDialogVisible = false);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.green,
+                                foregroundColor: Colors.white,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              child: const Text("HITUNG"),
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                setState(() => _isModeDialogVisible = false);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red,
+                                foregroundColor: Colors.white,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              child: const Text("BATAL"),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
           if (_isArahAmunisiVisible)
             Center(
               child: Container(
@@ -705,6 +1287,15 @@ class _DashboardPageState extends State<DashboardPage> {
           _mapController.move(myLoc, 15);
         }),
         _navButton(Icons.layers, "Layer Options", () {}),
+        _navButton(
+          _isModeDialogVisible ? Icons.toggle_on : Icons.toggle_off,
+          "Mode",
+          () {
+            setState(() {
+              _isModeDialogVisible = !_isModeDialogVisible;
+            });
+          },
+        ),
         _navButton(Icons.settings, "Settings", () {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => SettingsPage()));
